@@ -1,5 +1,5 @@
 <template>
-  <div style="flex: 2;">
+  <div style="flex: 2">
     <!--    <logo v-if="showLogo" :collapse="isCollapse" />-->
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu

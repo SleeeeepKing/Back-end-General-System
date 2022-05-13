@@ -1,10 +1,11 @@
 <template>
   <div>
-    <div>This is layout</div>
-    <sidebar class = "sidebar-container"></sidebar> <!-- 侧边栏 -->
-    <div class="main-container"><!-- 主体窗口 -->
+    <div style="background-color: #30B08F">HEADER</div>
+    <div  style="display: flex"><!-- 主体窗口 -->
+    <sidebar style="flex: 1.5;background-color: #3A71A8"></sidebar> <!-- 侧边栏 -->
+
 <!--      <div><navbar /></div>-->
-      <app-main/>   <!-- 主体窗口 -->
+      <app-main style="flex: 8.5;background-color: #C03639"/>   <!-- 主体窗口 -->
 <!--      <right-panel></right-panel>-->
     </div>
   </div>
@@ -19,7 +20,12 @@ export default {
   components: {AppMain, Navbar, Sidebar}
 }
 </script>
-
+<style>
+html , body{
+  margin: 0;
+  padding: 0;
+}
+</style>
 <style lang="scss" scoped>
 @import "~@/styles/mixin.scss";
 @import "~@/styles/variables.scss";
