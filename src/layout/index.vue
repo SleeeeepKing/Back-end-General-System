@@ -1,24 +1,22 @@
 <template>
   <div>
     <div>This is layout</div>
-<!--    <sidebar class = "sidebar-container"></sidebar>-->
-    <div class="main-container">
-      <div>
-        <navbar />
-
-      </div>
-      <app-main/>
+    <sidebar class = "sidebar-container"></sidebar> <!-- 侧边栏 -->
+    <div class="main-container"><!-- 主体窗口 -->
+<!--      <div><navbar /></div>-->
+      <app-main/>   <!-- 主体窗口 -->
 <!--      <right-panel></right-panel>-->
     </div>
   </div>
 </template>
 
 <script>
-import Navbar from "@/layout/components/Navbar";
-import AppMain from "@/layout/components/AppMain";
+import { AppMain, Navbar } from './components'
+import Sidebar from "@/layout/components/Sidebar";
+
 export default {
   name: "index",
-  components: {AppMain, Navbar}
+  components: {AppMain, Navbar, Sidebar}
 }
 </script>
 

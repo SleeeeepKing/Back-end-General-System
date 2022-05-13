@@ -7,7 +7,7 @@
     </transition>
   </section>
 </template>
-
+<!--该组件是主体窗口，通过  <router-view :key="key" /> 来控制现实的内容-->
 <script>
 export default {
   name: 'AppMain',
