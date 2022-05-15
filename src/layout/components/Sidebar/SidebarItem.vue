@@ -41,10 +41,19 @@
           <i class="el-icon-document"></i>
           <span slot="title">导航三</span>
         </el-menu-item>
-        <el-menu-item index="4">
-          <i class="el-icon-setting"></i>
-          <span slot="title">导航四</span>
-        </el-menu-item>
+
+
+        <el-submenu index="4" >
+          <template slot="title">
+            <i class="el-icon-s-data"></i>
+            <span>表格</span>
+          </template>
+          <el-menu-item-group>
+            <router-link to="/table/inline-edit-table" tag="el-menu-item" index="4-1">Inline表格</router-link>
+            <router-link to="/table/complex-table" tag="el-menu-item" index="4-2">综合表格</router-link>
+          </el-menu-item-group>
+        </el-submenu>
+
       </el-menu>
     </el-col>
     <!--    </el-row>-->

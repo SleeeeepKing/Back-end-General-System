@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="background-color: #30B08F">HEADER</div>
+    <div style="background-color: #30B08F"><h1>HEADER</h1></div>
     <div  style="display: flex"><!-- 主体窗口 -->
     <sidebar style="flex: 1.5;background-color: #3A71A8"></sidebar> <!-- 侧边栏 -->
 
@@ -21,7 +21,7 @@ export default {
 }
 </script>
 <style>
-html , body{
+html , body,h1{
   margin: 0;
   padding: 0;
 }

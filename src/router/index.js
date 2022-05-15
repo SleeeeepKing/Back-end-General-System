@@ -5,6 +5,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
+import tableRouter from "@/router/modules/table";
 
 const router = new Router({
     routes: [
@@ -39,7 +40,9 @@ const router = new Router({
                     meta: { title: 'Guide', icon: 'guide', noCache: true }
                 }
             ]
-        }
+        },
+        tableRouter,
+
     ]
 })
 
