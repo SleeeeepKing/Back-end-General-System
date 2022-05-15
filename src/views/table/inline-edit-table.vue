@@ -45,6 +45,7 @@
             size="small"
             icon="el-icon-circle-check-outline"
             @click="confirmEdit(row)"
+            style="float: left; width: 65px"
         >
           Ok
         </el-button>
