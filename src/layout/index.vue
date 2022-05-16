@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div style="background-color: #30B08F"><h1>HEADER</h1></div>
+    <div style="background-color: #30B08F">
+      <h1>HEADER</h1>
+      <Topbar/>
+    </div>
     <div  style="display: flex"><!-- 主体窗口 -->
     <sidebar style="flex: 1.5;background-color: #3A71A8"></sidebar> <!-- 侧边栏 -->
 
@@ -12,12 +15,13 @@
 </template>
 
 <script>
-import { AppMain, Navbar } from './components'
+import { AppMain, Navbar} from './components'
 import Sidebar from "@/layout/components/Sidebar";
+import Topbar from "@/layout/components/Topbar";
 
 export default {
   name: "index",
-  components: {AppMain, Navbar, Sidebar}
+  components: {AppMain, Navbar, Sidebar, Topbar}
 }
 </script>
 <style>
