@@ -12,7 +12,7 @@
           mode="vertical"
       >
         <!-- 侧边栏内容↓ -->
-        <sidebar-item/>
+        <sidebar-item v-for="route in constantRoutes" :key="route.path" :item="route" :base-path="route.path"/>
         <!-- 侧边栏内容↑ -->
       </el-menu>
     </el-scrollbar>
@@ -24,35 +24,41 @@ import {mapGetters} from 'vuex'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import variables from '@/styles/variables.scss'
+import {constantRoutes} from "@/router";
 
 export default {
+  data: function () {
+    return { constantRoutes }
+  },
   components: {SidebarItem, Logo},
   computed: {
     ...mapGetters([
+      'permission_routes',
       'sidebar'
     ]),
     routes() {
+      //TODO
       // return this.$router.options.routes
       return this.$store.state.permission.currentRoutes.children
     },
     activeMenu() {
       const route = this.$route
-      const { meta, path } = route
+      const {meta, path} = route
       // if set path, the sidebar will highlight the path you set
       if (meta.activeMenu) {
         return meta.activeMenu
       }
       return path
     },
-    showLogo() {
-      return this.$store.state.settings.sidebarLogo
-    },
+    // showLogo() {
+    //   return this.$store.state.settings.sidebarLogo
+    // },
     variables() {
       return variables
     },
-    isCollapse() {
-      return !this.sidebar.opened
-    }
+    // isCollapse() {
+    //   return !this.sidebar.opened
+    // }
   }
 }
 </script>
