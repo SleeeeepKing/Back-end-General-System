@@ -1,6 +1,5 @@
 <template>
-  <div style="flex: 2">
-    <!--    <logo v-if="showLogo" :collapse="isCollapse" />-->
+  <div >
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
           :default-active="activeMenu"
@@ -12,7 +11,7 @@
           mode="vertical"
       >
         <!-- 侧边栏内容↓ -->
-        <sidebar-item v-for="route in constantRoutes" :key="route.path" :item="route" :base-path="route.path"/>
+        <sidebar-item v-for="route in routes" :key="route.path" :item="route" :base-path="route.path"/>
         <!-- 侧边栏内容↑ -->
       </el-menu>
     </el-scrollbar>
@@ -21,7 +20,7 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import Logo from './Logo'
+import Logo from '../Logo'
 import SidebarItem from './SidebarItem'
 import variables from '@/styles/variables.scss'
 import {constantRoutes} from "@/router";
@@ -56,9 +55,7 @@ export default {
     variables() {
       return variables
     },
-    // isCollapse() {
-    //   return !this.sidebar.opened
-    // }
+
   }
 }
 </script>
