@@ -1,57 +1,104 @@
 <template>
-  <div class="top-nav">
-    <div class="log">带一级导航的后台管理系统</div>
+  <div>
+
     <el-menu
+
         :active-text-color="variables.menuActiveText"
         :default-active="activeMenu"
         mode="horizontal"
         @select="handleSelect"
     >
+      <div style="float: left;width: AUTO;height: 50px">
+        <logo :collapse="isCollapse"/>
+      </div>
       <div v-for="item in routes" :key="item.path" class="nav-item">
         <app-link :to="resolvePath(item)">
-          <el-menu-item
-              :index="item.path"
-          >{{ item.meta ? item.meta.title : item.children[0].meta.title }}</el-menu-item>
+          <el-menu-item style="float: left"
+                        v-if="!item.hidden"
+                        :index="item.path"
+                        :icon="item.meta && item.meta.icon"
+          >{{ item.meta ? item.meta.title : item.children[0].meta.title }}
+          </el-menu-item>
         </app-link>
       </div>
+<!--        ↓  头像下拉菜单-->
+      <div style="float: right">
+        <el-dropdown class="avatar-container" trigger="click">
+          <div class="avatar-wrapper">
+            <img src="../../assets/logo.png" class="user-avatar"
+                 style="cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;"/>
+            <i class="el-icon-caret-bottom"/>
+          </div>
+          <el-dropdown-menu slot="dropdown" class="user-dropdown">
+            <router-link to="/profile/index">
+              <el-dropdown-item>Profile</el-dropdown-item>
+            </router-link>
+            <router-link to="/">
+              <el-dropdown-item>Home</el-dropdown-item>
+            </router-link>
+            <el-dropdown-item divided @click.native="logout">
+              <span style="display:block;">Log Out</span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+      <!--        ↑  头像下拉菜单-->
+      <search style="float: right"  id="header-search" class="right-menu-item" />
+
     </el-menu>
 
-    <div class="right-menu">
-      <el-dropdown class="avatar-container" trigger="click">
-        <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link to="/">
-            <el-dropdown-item>Home</el-dropdown-item>
-          </router-link>
-          <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">Log Out</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-    </div>
+
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import {mapGetters} from 'vuex'
 import AppLink from './Sidebar/Link'
-import { constantRoutes } from '@/router'
+import {constantRoutes} from '@/router'
 import variables from '@/styles/variables.scss'
-import { isExternal } from '@/utils/validate'
+import {isExternal} from '@/utils/validate'
+import Layout from "@/layout";
+import Logo from "@/layout/components/Logo";
+import search from "@/components/HeaderSearch";
 
 export default {
   name: 'Topbar',
-  components: {
-    AppLink
-  },
-  data() {
+  data: function () {
     return {
+      routess: [
+        {
+          path: '/',
+          component: Layout,
+          redirect: '/dashboard',
+          children: [
+            {
+              path: 'dashboard',
+              component: () => import('@/views/dashboard/index'),
+              name: 'Dashboard',
+              meta: {title: 'Dashboard', icon: 'dashboard', affix: true}
+            }
+          ]
+        }
+      ],
       routes: constantRoutes
     }
   },
+  components:
+      {
+        AppLink,
+        Logo,
+        search
+      },
   computed: {
+    isCollapse() {
+      return !this.sidebar.opened
+    },
     activeMenu() {
       const route = this.$route
-      const { meta, path } = route
+      const {meta, path} = route
       // if set path, the sidebar will highlight the path you set
       if (meta.activeMenu) {
         return meta.activeMenu
@@ -78,7 +125,7 @@ export default {
   methods: {
     // 通过当前路径找到二级菜单对应项，存到store，用来渲染左侧菜单
     initCurrentRoutes() {
-      const { path } = this.$route
+      const {path} = this.$route
       let route = this.routes.find(
           item => item.path === '/' + path.split('/')[1]
       )
@@ -153,8 +200,9 @@ export default {
       }
     },
     async logout() {
-      await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      this.$router.push({path: '/login'});
+      // await this.$store.dispatch('user/logout')
+      // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }
 }

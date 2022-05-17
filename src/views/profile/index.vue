@@ -1,11 +1,13 @@
 <template>
-  <div id="app">
-    <router-view/>
-  </div>
+Hi, this is profile
 </template>
 
 <script>
 export default {
-  name: 'App',
+  name: "index"
 }
 </script>
+
+<style scoped>
+
+</style>

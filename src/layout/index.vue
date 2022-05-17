@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="background-color: #30B08F">
-      <h1>HEADER</h1>
+<!--      <h1>HEADER</h1>-->
       <Topbar/>
     </div>
     <div  style="display: flex"><!-- 主体窗口 -->
@@ -18,7 +18,6 @@
 import { AppMain, Navbar} from './components'
 import Sidebar from "@/layout/components/Sidebar";
 import Topbar from "@/layout/components/Topbar";
-
 export default {
   name: "index",
   components: {AppMain, Navbar, Sidebar, Topbar}

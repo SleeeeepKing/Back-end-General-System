@@ -1,79 +1,103 @@
 <template>
-  <div class="sidebar">
-    <!--    <el-row class="tac" >-->
-    <el-col>
-      <!--        <h5>侧边栏</h5>-->
-      <el-menu
-          default-active="2"
-          class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
-          background-color="#545c64"
-          text-color="#fff"
-          active-text-color="#ffd04b">
-        <router-link to="/dashboard" tag="el-menu-item" index="0"><i class="el-icon-menu"></i>Dashboard</router-link>
-        <el-submenu index="1">
-          <template slot="title">
-            <i class="el-icon-location"></i>
-            <span>导航一</span>
-          </template>
-          <el-menu-item-group>
-            <template slot="title">分组一</template>
-            <!--              <el-menu-item index="1-1">-->
-            <router-link to="/dashboard" tag="el-menu-item" index="1-1">Dashboard</router-link>
-            <!--              </el-menu-item>-->
-            <el-menu-item index="1-2">选项2</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="分组2">
-            <el-menu-item index="1-3">选项3</el-menu-item>
-          </el-menu-item-group>
-          <el-submenu index="1-4">
-            <template slot="title">选项4</template>
-            <el-menu-item index="1-4-1">选项1</el-menu-item>
-          </el-submenu>
-        </el-submenu>
-        <!--          <el-menu-item index="2">-->
-
-        <!--            <span slot="title" @click="goGuide">使用手册</span>-->
-        <router-link to="/guide" tag="el-menu-item" index="2"><i class="el-icon-menu"></i>使用手册</router-link>
-        <!--          </el-menu-item>-->
-        <el-menu-item index="3" disabled>
-          <i class="el-icon-document"></i>
-          <span slot="title">导航三</span>
+  <div v-if="!item.hidden">
+    <template
+        v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
+      <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
+        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
+          <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
         </el-menu-item>
+      </app-link>
+    </template>
 
-
-        <el-submenu index="4" >
-          <template slot="title">
-            <i class="el-icon-s-data"></i>
-            <span>表格</span>
-          </template>
-          <el-menu-item-group>
-            <router-link to="/table/inline-edit-table" tag="el-menu-item" index="4-1">Inline表格</router-link>
-            <router-link to="/table/complex-table" tag="el-menu-item" index="4-2">综合表格</router-link>
-          </el-menu-item-group>
-        </el-submenu>
-
-      </el-menu>
-    </el-col>
-    <!--    </el-row>-->
+    <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
+      <template slot="title">
+        <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
+      </template>
+      <sidebar-item
+          v-for="child in item.children"
+          :key="child.path"
+          :is-nest="true"
+          :item="child"
+          :base-path="resolvePath(child.path)"
+          class="nest-menu"
+      />
+    </el-submenu>
   </div>
 </template>
 
 <script>
+// import path from 'path'
+import {isExternal} from '@/utils/validate'
+import Item from './Item'
+import AppLink from './Link'
+import FixiOSBug from './FixiOSBug'
+
 export default {
-  name: "SidebarItem",
-  methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+  name: 'SidebarItem',
+  components: {Item, AppLink},
+  mixins: [FixiOSBug],
+  props: {
+    // route object
+    item: {
+      type: Object,
+      required: true
     },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
+    isNest: {
+      type: Boolean,
+      default: false
+    },
+    basePath: {
+      type: String,
+      default: ''
+    }
+  },
+  data() {
+    // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
+    // TODO: refactor with render function
+    this.onlyOneChild = null
+    return {}
+  },
+  methods: {
+    hasOneShowingChild(children = [], parent) {
+      const showingChildren = children.filter(item => {
+        if (item.hidden) {
+          return false
+        } else {
+          // Temp set(will be used if only has one showing child)
+          this.onlyOneChild = item
+          return true
+        }
+      })
+
+      // When there is only one child router, the child router is displayed by default
+      if (showingChildren.length === 1) {
+        return true
+      }
+
+      // Show parent if there are no child router to display
+      if (showingChildren.length === 0) {
+        this.onlyOneChild = {...parent, path: '', noShowingChildren: true}
+        return true
+      }
+
+      return false
+    },
+    resolvePath(routePath) {
+      if (isExternal(routePath)) {
+        return routePath
+      }
+      if (isExternal(this.basePath)) {
+        return this.basePath
+      }
+
+      if (this.basePath === '/') {
+        return this.basePath + routePath
+      } else if (this.basePath.slice(this.basePath.length-routePath.length) === routePath){
+        return this.basePath
+      } else{
+        return this.basePath + '/' + routePath
+      }
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>
